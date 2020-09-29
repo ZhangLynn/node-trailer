@@ -6,20 +6,22 @@
 // 服务器启动文件
 const Koa = require('koa')
 const app = new Koa();
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 
 const { connect, initSchema } = require('./database/init')
 
 ;(async () => {
     try {
-        await connect()
+
+        // await connect()
 
         // 数据库初始化
-        initSchema()
+        // initSchema()
 
         // 启动子进程脚本 爬数据
-        // require('./tasks/api')
+        // require('./process/master')
 
+        require('./tasks/b')
 
         app.use(async (ctx, next) => {
             ctx.body = 'success'

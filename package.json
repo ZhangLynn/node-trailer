@@ -1,10 +1,15 @@
 {
+  "scripts": {
+    "start": "node server/index.js"
+  },
   "dependencies": {
     "cluster": "^0.7.7",
+    "glob": "^7.1.6",
     "koa": "^2.13.0",
     "moment": "^2.29.0",
     "mongoose": "^5.10.7",
-    "superagent": "^6.1.0"
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   },
   "devDependencies": {
     "os": "^0.1.1"
