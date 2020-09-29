@@ -35,6 +35,7 @@ async function fetchVideo() {
     const res = await rp(url)
     console.log(res)
 }
+
 ;(async () => {
     await fetchVideo()
 })()

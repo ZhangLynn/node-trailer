@@ -9,35 +9,32 @@ const { Mixed, ObjectId } = Schema.Types
 const moment = require('moment')
 
 const videoSchema = new Schema({
-    doubanId: {
+    aid: {
+        unique: true,
+        type: Number
+    },
+    bvid: {
         unique: true,
         type: String
     },
-    // todo
-    category: [{
-        type: ObjectId,
-        ref: 'Category'
-    }],
 
-    rate: Number,
-    title: String,
-    summary: String,
-    video: String,
-    poster: String,
-    cover: String,
+    view: Number,
+    danmaku: Number,
+    reply: Number,
+    favorite: Number,
+    coin: Number,
+    share: Number,
 
-    rawTitle: String,
-    movieTypes: [String],
+    like: Number,
+    nowRank: Number,
+    hisRank: Number,
+    noReprint: Number,
+    copyright: Number,
+    argueMsg: String,
+    evaluation: String,
 
     // 使用Mixed 可以存放字符串 也可以存放字符串的数组
-    pubDate: Mixed,
-    year: Number,
-
-    videoKey: String,
-    posterKey: String,
-    coverKey: String,
-
-    tags: [String],
+    cid: Mixed,
 
     meta: {
         createdAt: {
@@ -60,4 +57,4 @@ videoSchema.pre('save', function (next) {
     next()
 })
 
-mongoose.model('Movie', videoSchema)
+mongoose.model('Video', videoSchema)
