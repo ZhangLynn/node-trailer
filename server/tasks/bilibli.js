@@ -6,12 +6,12 @@
 // 子进程做脏活累活
 const cp = require('child_process')
 const { resolve } = require('path')
-// const mongoose = require('mongoose')
-// const Video = mongoose.model('Video')
+const mongoose = require('mongoose')
+const Video = mongoose.model('Video')
 
 ;(async () => {
     const script = resolve(__dirname, '../crawler/videoList')
-    const child = cp.fork(script, [1, 10]);
+    const child = cp.fork(script, [201, 250]);
 
     let invoked = false;
 
@@ -32,16 +32,16 @@ const { resolve } = require('path')
     })
 
     child.on('message', data => {
-        let result = data.result
+        let result = data.result;
         result.forEach(async (item) => {
             if (item) {
-                // let video = await Video.findOne({
-                //     aid: item.aid
-                // })
-                // if (!video) {
-                //     video = new Video(item)
-                //     await video.save()
-                // }
+                let video = await Video.findOne({
+                    aid: item.aid
+                })
+                if (!video) {
+                    video = new Video(item)
+                    await video.save()
+                }
             }
         })
     })
