@@ -5,33 +5,49 @@
  */
 // 服务器启动文件
 const Koa = require('koa')
-const app = new Koa();
-// const mongoose = require('mongoose')
+// const app = new Koa();
+const { router } = require('./middlewares/router')
+
+const R = require('ramda')
+const MIDDLEWARES = ['router']
 
 const { connect, initSchema } = require('./database/init')
+const { resolve } = require('path')
 
+const useMiddlewares = app => {
+    R.map(
+        R.compose(
+            R.forEachObjIndexed(
+                initWith => initWith(app)
+            ),
+            require,
+            name => resolve(__dirname, `./middlewares/${name}`)
+        )
+    )(MIDDLEWARES)
+}
 ;(async () => {
     try {
 
-        // await connect()
+        await connect()
 
         // 数据库初始化
-        // initSchema()
+        initSchema()
 
         // 启动子进程脚本 爬数据
-        // require('./process/master')
+        // require('./tasks/b')
 
-        require('./tasks/b')
+        async function start() {
+            const app = new Koa()
+            await useMiddlewares(app)
+            app.listen(9107)
+        }
 
-        app.use(async (ctx, next) => {
-            ctx.body = 'success'
-        })
-        app.listen(9107)
+        start()
+
     } catch (e) {
         console.log(e)
     }
-
-
 })()
+
 
 
