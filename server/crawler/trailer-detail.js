@@ -16,36 +16,27 @@ const sleep = time => new Promise(resolve => {
     })
 
 ;(async () => {
-    // const browser = await puppeteer.launch({
-    //     args: ['--no-sandbox'],
-    //     dumpio: false
-    // })
-
-
     const movies = await Movie.find({})
 
-    // console.log(movies)
-    // movies.map(async m => {
-    //     m.tags = [];
-    //     m.category = []
-    //     await m.save()
-    // })
-    // return
-let preloadHref = ''
-    // movies.map(async item => {
-    //     if (item.doubanId && item._id) {
-    //         const doubanId = item.doubanId
-            const doubanId = '34947626'
-            const browser = await puppeteer.launch({headless: true});
+    if (movies.length === 0) return
+
+    const browser = await puppeteer.launch({headless: true});
+
+    let preloadHref = '',
+        count = 0;
+    movies.map(async item => {
+        if (item.doubanId && item._id) {
+            const doubanId = item.doubanId
+
             const page = await browser.newPage();
             await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
 
             await page.goto(url + doubanId + '/', {
-                waitUntil: 'networkidle2'
+                waitUntil: 'networkidle2',
+                timeout: 0
             })
 
             await sleep(2000)
-
 
             // const preloadHref = await page.$eval('a[rel=v:directedBy]', el => el.href);
             // console.log(preloadHref)
@@ -55,7 +46,7 @@ let preloadHref = ''
                 const average = rating.find('.rating_num').text();
                 const numRater = rating.find('.rating_people').text();
                 const info = $('#info')
-                preloadHref = document.querySelector("a[rel='v:directedBy']");
+                // preloadHref = document.querySelector("a[rel='v:directedBy']").text();
                 let tags = $('.tags-body a');
                 let tagsText = [],
                     year = 0;
@@ -69,15 +60,13 @@ let preloadHref = ''
                     })
                 }
 
-                let data = {
+                let movieData = {
                     tags: tagsText
                 }
 
-                return preloadHref;
+                return movieData;
             })
-            console.log(movieData)
 
-            return
             const movie = await Movie.findOne({
                 doubanId
             })
@@ -113,10 +102,13 @@ let preloadHref = ''
 
                 await movie.save()
             }
-            browser.close()
-    //     }
-    //
-    // })
+
+            count++
+            if (count === movies.length) {
+                browser.close()
+            }
+        }
+    })
     // process.send({result})
     // process.exit(0)
 })()
