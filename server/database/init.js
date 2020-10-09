@@ -15,6 +15,22 @@ exports.initSchema = () => {
     glob.sync(resolve(__dirname, './schema', '**/*.js')).forEach(require)
 }
 
+exports.initAdmin = async () => {
+    const User = mongoose.model('Uesr')
+    const admin = await User.findOne({
+        username: 'lynn'
+    })
+
+    if (!admin) {
+        const user = new User({
+            username: 'lynn',
+            email: 'zl8312070@sina.com',
+            password: '123456'
+        })
+        await user.save()
+    }
+}
+
 exports.connect = () => {
     let maxConnectTimes = 0;
 
@@ -23,7 +39,7 @@ exports.connect = () => {
             mongoose.set('debug', true)
         }
 
-        mongoose.connect(db);
+        mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });
 
         mongoose.connection.on('disconnected', () => {
             maxConnectTimes++;
@@ -37,11 +53,6 @@ exports.connect = () => {
 
         mongoose.connection.once('open', () => {
             console.log('启动了')
-            // const Person = mongoose.model('Person', { name: String })
-            // const person = new Person({ name: 'ling' })
-            // person.save().then(() => {
-            //     console.log('wa')
-            // })
             resolve()
         })
     })
