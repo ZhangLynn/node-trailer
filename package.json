@@ -4,10 +4,13 @@
     "dev": "node ./start.js"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "chrome-finder": "^1.0.7",
     "cluster": "^0.7.7",
     "glob": "^7.1.6",
     "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^3.2.1",
     "koa-router": "^9.4.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.0",

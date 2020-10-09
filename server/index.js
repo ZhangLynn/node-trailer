@@ -9,11 +9,12 @@ const Koa = require('koa')
 const { router } = require('./middlewares/router')
 
 const R = require('ramda')
-const MIDDLEWARES = ['router']
+const MIDDLEWARES = ['common', 'router']
 
 const { connect, initSchema } = require('./database/init')
 const { resolve } = require('path')
 
+// 引入中间件
 const useMiddlewares = app => {
     R.map(
         R.compose(
@@ -25,6 +26,7 @@ const useMiddlewares = app => {
         )
     )(MIDDLEWARES)
 }
+
 ;(async () => {
     try {
 
@@ -34,7 +36,7 @@ const useMiddlewares = app => {
         initSchema()
 
         // 启动子进程脚本 爬数据
-        // require('./tasks/b')
+        // require('./crawler/trailer-detail')
 
         async function start() {
             const app = new Koa()
