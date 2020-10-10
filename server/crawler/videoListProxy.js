@@ -16,6 +16,11 @@ const fetchVideo = async (id) => {
     const ipUrl = 'http://118.25.93.211:16688/random?protocol=http&nick_type=2'
 
     const ip = await rp.get(ipUrl);
+    const data = await rp(`${url}?aid=${id}`, {
+        proxy: ip,
+    })
+    console.log(data)
+    return data;
     const proxyRequest = request.defaults({
         proxy: ip,
         timeout: 2000

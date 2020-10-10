@@ -37,6 +37,7 @@ const Movie = mongoose.model('Movie')
             let movie = await Movie.findOne({
                 doubanId: item.doubanId
             })
+
             if (!movie) {
                 movie = new Movie(item)
                 await movie.save()

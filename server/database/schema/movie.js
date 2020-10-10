@@ -13,7 +13,7 @@ const videoSchema = new Schema({
         unique: true,
         type: String
     },
-    // todo
+    // todo what is ObjectId and what's it use for
     category: [{
         type: ObjectId,
         ref: 'Category'

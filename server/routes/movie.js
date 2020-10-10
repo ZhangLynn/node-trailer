@@ -19,17 +19,6 @@ import {
 
 @controller('/api/v0/movies')
 export class movieController {
-    // @get('/')
-    // async getMovieList(ctx) {
-    //     let {
-    //         types,
-    //         year,
-    //         page,
-    //         size,
-    //         doubanId,
-    //         videoExists
-    //     } = ctx.query
-    // }
 
     @get('/')
     async getAllMovies(ctx, next) {

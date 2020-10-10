@@ -5,7 +5,7 @@
  */
 // 第二步.通过doubanId直接获取api中的数据,补充一些数据到数据库中
 // todo 支持await调用
-const rp = require('request-promise-native')  //http的request获取数据
+const rp = require('request-promise')  //http的request获取数据
 const mongoose = require('mongoose')
 // const Video = mongoose.model('Video')
 // const Category = mongoose.model('Category')
@@ -30,112 +30,102 @@ async function fetchMovie(item) {
     return body
 }
 
-async function fetchVideo() {
-    const url = 'http://api.bilibili.com/archive_stat/stat?aid=BV1Dx41177tU'
-    const res = await rp(url)
-    console.log(res)
-}
-
-;(async () => {
-    await fetchVideo()
-})()
-
 // 立即执行函数，获取API中的全部电影数据
-// ;(async () => {
-//     // 从数据库中查询，补充不完整的数据
-//     let movies = await Video.find({
-//         // 如果满足以下条件的则拿出
-//         $or: [
-//             { summary: { $exists: false } }, //summary不存在
-//             { summary: ''}, //summary为空
-//             { summary: null }, //
-//             { title: '' }, //title为空
-//             { year: { $exists: false } }, //年份为空
-//             { pubdate: { $exists: false } }
-//         ]
-//     })
-//
-//     //减少api的访问次数，先改为只取一条
-//     for (let i = 0; i < [movies[0]].length; i++) {
-//     // for (let i = 0; i < movies.length; i++) {
-//         let movie = movies[i]
-//         let movieData = await fetchMovie(movie)
-//
-//         if (movieData) {
-//             let tags = movieData.tags || [] //或者缺省值
-//
-//             movie.tags = movie.tags || []
-//             movie.summary = movieData.summary || ''
-//             movie.title = movieData.alt_title || movieData.title || ''
-//             movie.rawTitle = movieData.title || ''
-//
-//             if (movieData.attrs) {
-//                 movie.movieTypes = movieData.attrs.movie_type || []
-//                 movie.year = movieData.attrs.year[0] || 2500
-//
-//                 // 处理分类 两个数据库关联操作
-//                 for (let i = 0; i < movie.movieTypes.length; i++) {
-//                     let item = movie.movieTypes[i]
-//                     let cat = await Category.findOne({
-//                         name: item
-//                     })
-//
-//                     if (!cat) {
-//                         cat = new Category({
-//                             name: item,
-//                             movies: [movie._id]
-//                         })
-//                     } else {
-//                         if (cat.movies.indexOf(movie._id) === -1) {
-//                             cat.movies.push(movie._id)
-//                         }
-//                     }
-//                     // 异步存取
-//                     await cat.save()
-//
-//                     // 数组的存入每次都要check是否重复值
-//                     if (!movie.category) {
-//                         movie.category.push(cat._id)
-//                     } else {
-//                         if (movie.category.indexOf(cat._id) === -1) {
-//                             movie.category.push(cat._id)
-//                         }
-//                     }
-//                 }
-//
-//                 // 处理上映时间和国家
-//                 let dates = movieData.attrs.pubdate || []
-//                 let pubdates = []
-//
-//                 dates.map(item => {
-//                     if (item && item.split('(').length > 0) {
-//                         let parts = item.split('(')
-//                         let date = parts[0]
-//                         let country = '未知'
-//
-//                         if (parts[1]) {
-//                             country = parts[1].split(')')[0]
-//                         }
-//                         pubdates.push({
-//                             date: new Date(date),
-//                             country
-//                         })
-//                     }
-//                 })
-//
-//                 movie.pubDate = pubdates
-//             }
-//
-//             // 这里每次都添加了tags,再调试一下
-//             tags.forEach(tag => {
-//                 movie.tags.push(tag.name)
-//             })
-//
-//             await movie.save()
-//         }
-//
-//     }
-// })()
+;(async () => {
+    // 从数据库中查询，补充不完整的数据
+    let movies = await Video.find({
+        // 如果满足以下条件的则拿出
+        $or: [
+            { summary: { $exists: false } }, //summary不存在
+            { summary: ''}, //summary为空
+            { summary: null }, //
+            { title: '' }, //title为空
+            { year: { $exists: false } }, //年份为空
+            { pubdate: { $exists: false } }
+        ]
+    })
+
+    //减少api的访问次数，先改为只取一条
+    for (let i = 0; i < [movies[0]].length; i++) {
+    // for (let i = 0; i < movies.length; i++) {
+        let movie = movies[i]
+        let movieData = await fetchMovie(movie)
+
+        if (movieData) {
+            let tags = movieData.tags || [] //或者缺省值
+
+            movie.tags = movie.tags || []
+            movie.summary = movieData.summary || ''
+            movie.title = movieData.alt_title || movieData.title || ''
+            movie.rawTitle = movieData.title || ''
+
+            if (movieData.attrs) {
+                movie.movieTypes = movieData.attrs.movie_type || []
+                movie.year = movieData.attrs.year[0] || 2500
+
+                // 处理分类 两个数据库关联操作
+                for (let i = 0; i < movie.movieTypes.length; i++) {
+                    let item = movie.movieTypes[i]
+                    let cat = await Category.findOne({
+                        name: item
+                    })
+
+                    if (!cat) {
+                        cat = new Category({
+                            name: item,
+                            movies: [movie._id]
+                        })
+                    } else {
+                        if (cat.movies.indexOf(movie._id) === -1) {
+                            cat.movies.push(movie._id)
+                        }
+                    }
+                    // 异步存取
+                    await cat.save()
+
+                    // 数组的存入每次都要check是否重复值
+                    if (!movie.category) {
+                        movie.category.push(cat._id)
+                    } else {
+                        if (movie.category.indexOf(cat._id) === -1) {
+                            movie.category.push(cat._id)
+                        }
+                    }
+                }
+
+                // 处理上映时间和国家
+                let dates = movieData.attrs.pubdate || []
+                let pubdates = []
+
+                dates.map(item => {
+                    if (item && item.split('(').length > 0) {
+                        let parts = item.split('(')
+                        let date = parts[0]
+                        let country = '未知'
+
+                        if (parts[1]) {
+                            country = parts[1].split(')')[0]
+                        }
+                        pubdates.push({
+                            date: new Date(date),
+                            country
+                        })
+                    }
+                })
+
+                movie.pubDate = pubdates
+            }
+
+            // 这里每次都添加了tags,再调试一下
+            tags.forEach(tag => {
+                movie.tags.push(tag.name)
+            })
+
+            await movie.save()
+        }
+
+    }
+})()
 
 
 /**
