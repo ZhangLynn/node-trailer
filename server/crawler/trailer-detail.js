@@ -44,24 +44,37 @@ const sleep = time => new Promise(resolve => {
                 const $ = window.$
                 let rating = $('#interest_sectl')
                 const average = rating.find('.rating_num').text();
-                const numRater = rating.find('.rating_people').text();
+                const numRater = rating.find('.rating_people span[property="v:votes"]').text();
+
                 const info = $('#info')
-                // preloadHref = document.querySelector("a[rel='v:directedBy']").text();
+                const director = info.find("a[rel='v:directedBy']").text();
+                const initialReleaseDate = info.find("span[rel='v:initialReleaseDate']").text();
+
+                const types = $('#info span[property="v:genre"]')
+                let typesText = [];
+                if (types.length >= 1) {
+                    types.each((index, item) => {
+                        let it = $(item);
+                        typesText.push(it.text())
+                    })
+                }
+
                 let tags = $('.tags-body a');
-                let tagsText = [],
-                    year = 0;
+                let tagsText = [];
                 if (tags.length >= 1) {
                     tags.each((index, item) => {
                         let it = $(item);
                         tagsText.push(it.text())
-                        // if (typeof parseInt(it.text()) === 'number') {
-                        //     year = it.text()
-                        // }
                     })
                 }
 
                 let movieData = {
-                    tags: tagsText
+                    tags: tagsText,
+                    types: typesText,
+                    director,
+                    average,
+                    numRater,
+                    initialReleaseDate,
                 }
 
                 return movieData;
@@ -70,7 +83,7 @@ const sleep = time => new Promise(resolve => {
             const movie = await Movie.findOne({
                 doubanId
             })
-
+            console.log(movieData)
             for (let i = 0; i < movieData.tags.length; i++) {
                 const item = movieData.tags[i]
 
