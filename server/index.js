@@ -36,7 +36,7 @@ const useMiddlewares = app => {
         initSchema()
 
         // 启动子进程脚本 爬数据
-        require('./crawler/trailer-detail')
+        // require('./crawler/trailer-detail')
 
         async function start() {
             const app = new Koa()
