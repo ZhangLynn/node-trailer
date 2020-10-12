@@ -25,7 +25,8 @@ exports.initAdmin = async () => {
         const user = new User({
             username: 'lynn',
             email: 'zl8312070@sina.com',
-            password: '123456'
+            password: '123456',
+            role: 'admin'
         })
         await user.save()
     }

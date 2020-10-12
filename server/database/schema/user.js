@@ -26,6 +26,10 @@ const userSchema = new Schema({
         unique: true,
         type: String
     },
+    role: {
+        type: String,
+        default: 'user'
+    },
     lockUntil: Number,
     loginAttempts: {
         default: 0,
