@@ -9,6 +9,8 @@ const glob = require('glob')
 const symbolPrefix = Symbol('prefix')
 const routerMap = new Map()
 
+const R = require('ramda')
+
 const _ = require('lodash')
 const isArray = c => _.isArray(c) ? c : [c]
 
@@ -89,4 +91,68 @@ export const use = path => router({
 export const all = path => router({
     method: 'get',
     path
+})
+
+const changeToArr = R.unless(
+    R.is(isArray),
+    R.of
+)
+
+const decorate = (args, middleware) => {
+    let [target, key, descriptor] = args
+
+    target[key] = isArray(target[key])
+    target[key].unshift(middleware)
+
+    return descriptor
+}
+
+const convert = middleware => (...args) => decorate(args, middleware)
+
+export const auth = convert(async (ctx, next) => {
+    if (!ctx.session.user) {
+        return (
+            ctx.body = {
+                success: false,
+                code: 401,
+                message: '登录失效'
+            }
+        )
+    }
+})
+
+export const admin = roleExpected => convert(async (ctx, next) => {
+    const { role } = ctx.session.user
+
+    if (!role || role !== 'admin') {
+        return (
+            ctx.body = {
+                success: false,
+                code: 403,
+                message: '没有权限'
+            }
+        )
+    }
+})
+
+export const required = rules => convert(async(ctx, next) => {
+    let errors = []
+
+    const checkRules = R.forEachObjIndexed((
+        (value, key) => {
+            errors = R.filter(i => !R.has(i, ctx, ctx.request[key]))(value)
+        }
+    ))
+
+    checkRules(rules)
+
+    if (errors.length) {
+        return ctx.body = {
+            success: false,
+            code: 412,
+            message: `${errors.join(',')} is required`
+        }
+    }
+
+    await next()
 })
