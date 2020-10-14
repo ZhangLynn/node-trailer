@@ -1,24 +1,24 @@
-app:
+apps:
   - srcipt: ./server/index.js
     name: 'trailer'
     env:
       COMMON_VARIABLE: true
     env_production:
       NODE_ENV: production
-  deploy:
-    production:
-      user: root
-      host:
-        122.51.186.171
-      port: 22
-      ref: origin/master
-      repo:
-        https://github:com/ZhangLynn/node-trailer
-      path:
-        /www/node-trailer/production
-      ssh_options: StringHostKeyChecing=no
-      pre-deploy: git fetch --all
-      post-deploy: 'npm install && npm build && pm2
-        startOrRestart deploy.yaml --env production'
-      env:
-        NODE_ENV: production
+deploy:
+  production:
+    user: root
+    host:
+      122.51.186.171
+    port: 22
+    ref: origin/master
+    repo:
+      https://github:com/ZhangLynn/node-trailer
+    path:
+      /www/node-trailer/production
+    ssh_options: StrictHostKeyChecing=no
+    pre-deploy: git fetch --all
+    post-deploy: 'npm install && npm build && pm2
+      startOrRestart deploy.yaml --env production'
+    env:
+      NODE_ENV: production
