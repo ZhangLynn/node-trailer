@@ -7,6 +7,7 @@ import {
     controller,
     get,
     post,
+    del,
     auth,
     admin,
     required,
@@ -17,14 +18,17 @@ import {
 } from '../service/user'
 
 import {
-    getAllMovies
+    getAllMovies,
+    findOneAndRemoveMovie
 } from "../service/movie"
 
 // 让所有路由都能被合理的拆分
 
 @controller('/admin')
 export class adminController {
-    @get('/list')
+    // list 做一个auth验证 后面不用做了?
+
+    @get('/movie/list')
     @auth
     @admin('admin')
     async getMovieList(ctx) {
@@ -34,6 +38,29 @@ export class adminController {
             movies,
         }
     }
+
+    @del('/movie/delete')
+    // @required({
+    //     query: ['id']
+    // })
+    async deleteMovie(ctx) {
+        const { id } = ctx.query
+
+        const result = await findOneAndRemoveMovie(id)
+
+        if (result) {
+            ctx.body = {
+                success: true,
+                message: '删除成功'
+            }
+        } else {
+            ctx.body = {
+                success: false,
+                message: '删除失败'
+            }
+        }
+    }
+
 
     @post('/login')
     @required({
@@ -51,6 +78,13 @@ export class adminController {
         }
 
         if (matchData.match) {
+            ctx.session.user = {
+                _id: matchData.user.id,
+                email: matchData.user.email,
+                username: matchData.user.username,
+                role: matchData.user.role
+            }
+
             return ctx.body = {
                 success: true,
             }
