@@ -13,7 +13,7 @@ deploy:
     port: 22
     ref: origin/master
     repo:
-      https://github:com/ZhangLynn/node-trailer
+      https://github.com/ZhangLynn/node-trailer
     path:
       /www/node-trailer/production
     ssh_options: StrictHostKeyChecking=no
