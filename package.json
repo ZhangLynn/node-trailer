@@ -2,7 +2,9 @@
   "scripts": {
     "start": "nodemon ./start.js",
     "build": "rm -rf parcel/dist && parcel build src/index.html --no-cache -d dist --public-url /",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "pm2 deploy ecosystem.config.js production",
+    "setDeploy": "pm2 deploy ecosystem.config.js production setup"
   },
   "dependencies": {
     "@babel/preset-es2015": "^7.0.0-beta.53",
