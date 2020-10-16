@@ -6,7 +6,7 @@
 // 服务器启动文件
 const Koa = require('koa')
 const app = new Koa();
-const { router } = require('./middlewares/router')
+import { router } from './middlewares/router'
 
 const R = require('ramda')
 const MIDDLEWARES = ['common', 'router']
