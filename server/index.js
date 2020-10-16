@@ -5,6 +5,7 @@
  */
 // 服务器启动文件
 const Koa = require('koa')
+console.log('app server')
 const app = new Koa();
 const { router } = require('./middlewares/router')
 
