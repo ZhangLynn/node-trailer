@@ -6,26 +6,26 @@
 // 服务器启动文件
 const Koa = require('koa')
 // const app = new Koa();
-const { router } = require('./middlewares/router')
-
-const R = require('ramda')
-const MIDDLEWARES = ['common', 'router']
-
-const { connect, initSchema } = require('./database/init')
-const { resolve } = require('path')
+// const { router } = require('./middlewares/router')
+//
+// const R = require('ramda')
+// const MIDDLEWARES = ['common', 'router']
+//
+// const { connect, initSchema } = require('./database/init')
+// const { resolve } = require('path')
 
 // 引入中间件
-const useMiddlewares = app => {
-    R.map(
-        R.compose(
-            R.forEachObjIndexed(
-                initWith => initWith(app)
-            ),
-            require,
-            name => resolve(__dirname, `./middlewares/${name}`)
-        )
-    )(MIDDLEWARES)
-}
+// const useMiddlewares = app => {
+//     R.map(
+//         R.compose(
+//             R.forEachObjIndexed(
+//                 initWith => initWith(app)
+//             ),
+//             require,
+//             name => resolve(__dirname, `./middlewares/${name}`)
+//         )
+//     )(MIDDLEWARES)
+// }
 
 ;(async () => {
     try {
