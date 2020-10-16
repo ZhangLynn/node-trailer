@@ -1,6 +1,6 @@
 module.exports = {
   apps : [{
-    script: './server/index.js',
+    script: './start.js',
     watch: '.',
     name: 'trailer',
     env: {
