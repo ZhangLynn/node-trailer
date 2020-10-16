@@ -20,7 +20,7 @@ module.exports = {
       ssh_options: 'StrictHostKeyChecking=no',
       path : '/www/node-trailer/production',
       'pre-deploy-local': 'git fetch --all',
-      'post-deploy' : 'cnpm install && pm2 reload ecosystem.config.js --env production',
+      'post-deploy' : 'git pull && cnpm install && pm2 reload ecosystem.config.js --env production',
       env: {
         NODE_ENV: 'production'
       }
