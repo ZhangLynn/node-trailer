@@ -33,14 +33,19 @@ const useMiddlewares = app => {
         await connect()
 
         // 数据库初始化
-        initSchema()
+        // initSchema()
 
         // 启动子进程脚本 爬数据
         // require('./crawler/trailer-detail')
 
         async function start() {
             const app = new Koa()
-            await useMiddlewares(app)
+            // await useMiddlewares(app)
+
+            app.use(async ctx => {
+                ctx.body = 'Hello World';
+            });
+
             app.listen(9107)
         }
 
