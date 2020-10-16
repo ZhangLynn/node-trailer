@@ -30,7 +30,7 @@ const useMiddlewares = app => {
 ;(async () => {
     try {
 
-        await connect()
+        // await connect()
 
         // 数据库初始化
         // initSchema()
