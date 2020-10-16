@@ -5,7 +5,6 @@
  */
 // 服务器启动文件
 const Koa = require('koa')
-console.log('app server')
 const app = new Koa();
 const { router } = require('./middlewares/router')
 
@@ -44,7 +43,7 @@ const useMiddlewares = app => {
             // await useMiddlewares(app)
 
             app.use(async ctx => {
-                ctx.body = 'Hello World';
+                ctx.body = 'Hello Ling';
             });
 
             app.listen(9107)
