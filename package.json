@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon ./start.js",
+    "start": "cross-env NODE_ENV=development && nodemon ./start.js",
+    "dev": "cross-env NODE_ENV=development && nodemon ./start.js",
     "build": "rm -rf parcel/dist && parcel build src/index.html --no-cache -d dist --public-url /",
     "test": "echo \\\"Error: no server/test specified\\\" && exit 1",
     "deploy": "pm2 deploy ecosystem.config.js production",
@@ -49,6 +50,7 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "@babel/runtime-corejs2": "^7.0.0"
+    "@babel/runtime-corejs2": "^7.0.0",
+    "cross-env": "^7.0.2"
   }
 }
