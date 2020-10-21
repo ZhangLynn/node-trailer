@@ -14,6 +14,8 @@ const MIDDLEWARES = ['common', 'router']
 const { connect, initSchema } = require('./database/init')
 const { resolve } = require('path')
 
+require('./test')
+
 // 引入中间件
 const useMiddlewares = app => {
     R.map(
@@ -30,21 +32,21 @@ const useMiddlewares = app => {
 ;(async () => {
     try {
 
-        // await connect()
+        await connect()
 
         // 数据库初始化
-        // initSchema()
+        initSchema()
 
         // 启动子进程脚本 爬数据
         // require('./crawler/trailer-detail')
 
         async function start() {
             const app = new Koa()
-            // await useMiddlewares(app)
+            await useMiddlewares(app)
 
-            app.use(async ctx => {
-                ctx.body = 'Hello Ling';
-            });
+            // app.use(async ctx => {
+            //     ctx.body = 'Hello Ling';
+            // });
 
             app.listen(9107)
         }

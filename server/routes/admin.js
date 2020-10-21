@@ -14,7 +14,9 @@ import {
 } from '../lib/decorator'
 
 import {
-    checkPassword
+    checkPassword,
+    checkUser,
+    registerUser
 } from '../service/user'
 
 import {
@@ -61,7 +63,34 @@ export class adminController {
         }
     }
 
+    @post('/register')
+    @required({
+        body: ['email', 'username', 'password']
+    })
+    async register(ctx) {
+        const { email, password, username } = ctx.request.body
 
+        const findUser = await checkUser(email, username)
+
+        if (findUser) {
+            return ctx.body = {
+                success: false,
+                message: '用户名或者邮箱已重复'
+            }
+        }
+
+        const insertedUser = await registerUser({
+            email,
+            password,
+            username
+        })
+
+        return ctx.body = {
+            success: true,
+            message: '注册成功',
+            data: insertedUser
+        }
+    }
     @post('/login')
     @required({
         body: ['email', 'password', 'abc']
