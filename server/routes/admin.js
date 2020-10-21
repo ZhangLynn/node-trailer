@@ -68,6 +68,7 @@ export class adminController {
         body: ['email', 'username', 'password']
     })
     async register(ctx) {
+
         const { email, password, username } = ctx.request.body
 
         const findUser = await checkUser(email, username)
@@ -91,9 +92,11 @@ export class adminController {
             data: insertedUser
         }
     }
+
+
     @post('/login')
     @required({
-        body: ['email', 'password', 'abc']
+        body: ['email', 'password']
     })
     async login(ctx) {
         const { email, password } = ctx.request.body
@@ -124,6 +127,5 @@ export class adminController {
             message: '密码或者账号不正确'
         }
     }
-
 }
 
