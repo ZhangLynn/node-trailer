@@ -19,26 +19,18 @@ export const checkPassword = async (email, password) => {
 export const checkUser = async(email, username) => {
   let match = false;
 
-  const emailCheck = await User.find({ email })
-  const usernameCheck = await User.find({ username })
+  const emailCheck = await User.findOne({ email })
+  const usernameCheck = await User.findOne({ username })
 
   if (emailCheck || usernameCheck) match = true
 
-  return {
-    match
-  }
+  return match
 }
 
-export const registerUser = async(email, username, password) => {
-  const user = {
-    username,
-    email,
-    password,
-  }
+export const registerUser = async(data) => {
+  const user = new User(data)
 
-  const insertedUser = await User.insertOne(user)
+  const insertedUser = await user.save()
 
-  return {
-    user: insertedUser
-  }
+  return insertedUser
 }
