@@ -137,10 +137,14 @@ export const admin = roleExpected => convert(async (ctx, next) => {
 
 export const required = rules => convert(async(ctx, next) => {
     let errors = []
-
+    
     const checkRules = R.forEachObjIndexed((
         (value, key) => {
-            errors = R.filter(i => !R.has(i, ctx, ctx.request[key]))(value)
+            errors = R.filter(i => {
+                return !value.includes(i)
+
+                // return !R.has(i, ctx, ctx.request[key])
+            })(value)
         }
     ))
 
