@@ -14,7 +14,7 @@ const MIDDLEWARES = ['common', 'router']
 const { connect, initSchema } = require('./database/init')
 const { resolve } = require('path')
 
-require('./test')
+// require('./test')
 
 // 引入中间件
 const useMiddlewares = app => {
