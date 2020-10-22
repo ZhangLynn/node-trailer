@@ -6,7 +6,6 @@
 // 服务器启动文件
 const Koa = require('koa')
 const app = new Koa();
-const { router } = require('./middlewares/router')
 
 const R = require('ramda')
 const MIDDLEWARES = ['common', 'router']
@@ -47,8 +46,10 @@ const useMiddlewares = app => {
             // app.use(async ctx => {
             //     ctx.body = 'Hello Ling';
             // });
+            // app.use(bodyParser())
+            app.listen('9107')
 
-            app.listen(9107)
+            // app.listen(process.env.NODE_ENV === 'production' ? process.env.env_production.PORT : '9107')
         }
 
         start()

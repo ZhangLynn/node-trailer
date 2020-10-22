@@ -5,7 +5,8 @@
  */
 const mongoose = require('mongoose');
 const { resolve } = require('path')
-const db = process.env.NODE_ENV !== 'production' ? 'mongodb://localhost:19911/douban-trailer' : 'mongodb://localhost:27017/douban-trailer'
+console.log(process.env.NODE_ENV)
+const db = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:19911/douban-trailer' : 'mongodb://localhost:27017/douban-trailer'
 const glob = require('glob')
 
 // 重置promise
