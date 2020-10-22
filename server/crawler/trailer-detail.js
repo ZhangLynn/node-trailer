@@ -83,7 +83,6 @@ const sleep = time => new Promise(resolve => {
             const movie = await Movie.findOne({
                 doubanId
             })
-            console.log(movieData)
             for (let i = 0; i < movieData.tags.length; i++) {
                 const item = movieData.tags[i]
 
